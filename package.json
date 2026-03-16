@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_OPTIONS=--no-experimental-webstorage next dev -H 0.0.0.0",
     "build": "next build",
+    "postbuild": "node scripts/postbuild-pages.mjs",
     "start": "next start -H 0.0.0.0",
     "lint": "next lint"
   },

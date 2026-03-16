@@ -61,6 +61,29 @@ This is a learning simulator, not a real SQL Server engine. User-entered SQL Ser
 
 5. Open [http://localhost:3000/sandbox](http://localhost:3000/sandbox) for SQL Server practice mode.
 
+## GitHub Pages deployment (static export)
+
+This repository is configured for GitHub Pages static hosting:
+
+- Next.js static export is enabled in `next.config.ts` (`output: "export"`).
+- GitHub Pages project path is configured with:
+`basePath: "/BuddySQLServer"` and `assetPrefix: "/BuddySQLServer/"`.
+- Build output is generated in `out/`.
+- Deployment workflow is in `.github/workflows/deploy-pages.yml`.
+
+### Local verification for Pages build
+
+```bash
+npm ci
+npm run build
+```
+
+After build:
+
+- `out/` contains static files for deployment
+- `out/404.html` is generated from `out/index.html` for deep-link fallback
+- `out/.nojekyll` is created for GitHub Pages compatibility
+
 ## SQL Server Practice Mode (MVP)
 
 ### Internal execution flow
