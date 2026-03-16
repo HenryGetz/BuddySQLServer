@@ -5,9 +5,151 @@
   --background-rgb: 248, 250, 252;
 }
 
+:root.dark {
+  --foreground-rgb: 226, 232, 240;
+  --background-rgb: 2, 6, 23;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+}
+
+/* Dark mode utility mappings for existing Tailwind classes used across the app */
+:root.dark .bg-white {
+  background-color: #0f172a !important;
+}
+
+:root.dark .bg-gray-50 {
+  background-color: #172033 !important;
+}
+
+:root.dark .bg-gray-100 {
+  background-color: #243146 !important;
+}
+
+:root.dark .bg-gray-200 {
+  background-color: #334155 !important;
+}
+
+:root.dark .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+:root.dark .text-gray-800 {
+  color: #e2e8f0 !important;
+}
+
+:root.dark .text-gray-700 {
+  color: #e2e8f0 !important;
+}
+
+:root.dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+:root.dark .text-gray-500 {
+  color: #b9c9de !important;
+}
+
+:root.dark .text-gray-400 {
+  color: #93aac5 !important;
+}
+
+:root.dark .text-blue-700 {
+  color: #dbeafe !important;
+}
+
+:root.dark .text-blue-600 {
+  color: #bfdbfe !important;
+}
+
+:root.dark .border-gray-100,
+:root.dark .border-gray-200,
+:root.dark .border-gray-300 {
+  border-color: #334155 !important;
+}
+
+:root.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155 !important;
+}
+
+:root.dark .bg-blue-50 {
+  background-color: #1e293b !important;
+}
+
+:root.dark .bg-blue-100 {
+  background-color: #1e3a8a !important;
+}
+
+:root.dark .border-blue-300 {
+  border-color: #3b82f6 !important;
+}
+
+:root.dark .hover\:bg-blue-50:hover {
+  background-color: #1e293b !important;
+}
+
+:root.dark .hover\:bg-gray-50:hover,
+:root.dark .hover\:bg-gray-100:hover,
+:root.dark .hover\:bg-gray-200:hover {
+  background-color: #1e293b !important;
+}
+
+:root.dark .bg-red-50 {
+  background-color: #450a0a !important;
+}
+
+:root.dark .bg-yellow-50 {
+  background-color: #422006 !important;
+}
+
+:root.dark .border-yellow-300 {
+  border-color: #b45309 !important;
+}
+
+:root.dark .text-yellow-800 {
+  color: #fde68a !important;
+}
+
+:root.dark .border-red-200,
+:root.dark .border-red-300 {
+  border-color: #7f1d1d !important;
+}
+
+:root.dark .text-red-800,
+:root.dark .text-red-700,
+:root.dark .text-red-600 {
+  color: #fecaca !important;
+}
+
+:root.dark .bg-green-50 {
+  background-color: #052e16 !important;
+}
+
+:root.dark .border-green-200 {
+  border-color: #166534 !important;
+}
+
+:root.dark .text-green-800 {
+  color: #bbf7d0 !important;
+}
+
+:root.dark .shadow-sm,
+:root.dark .shadow-md,
+:root.dark .shadow-lg {
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.45) !important;
+}
+
+:root.dark textarea,
+:root.dark input,
+:root.dark select {
+  background-color: #0b1220;
+  color: #e2e8f0;
+}
+
+:root.dark ::placeholder {
+  color: #64748b;
 }
 
 /* Custom prose styles for markdown content */

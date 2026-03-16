@@ -2,8 +2,10 @@ import { lessons } from "@/lib/lessons";
 import { getAllGlossaryTerms } from "@/lib/glossaryData";
 import { MetadataRoute } from "next";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://buddysql.seancoughlin.me";
+  const baseUrl = "https://henrygetz.github.io/BuddySQLServer";
 
   const lessonEntries = lessons.map((lesson) => ({
     url: `${baseUrl}/lessons/${lesson.slug}`,

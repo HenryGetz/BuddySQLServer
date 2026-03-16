@@ -1,23 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Cross-Origin-Embedder-Policy",
-            value: "require-corp",
-          },
-          {
-            key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
-          },
-        ],
-      },
-    ];
+  output: "export",
+  images: {
+    unoptimized: true,
   },
+  basePath: "/BuddySQLServer",
+  assetPrefix: "/BuddySQLServer/",
 };
 
 module.exports = nextConfig;

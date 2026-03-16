@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 export const defaultMetadata: Metadata = {
+  metadataBase: new URL("https://henrygetz.github.io/BuddySQLServer/"),
   title: {
     default: "SQL Playground - Learn SQL in Your Browser",
     template: "%s | SQL Playground",
@@ -22,7 +23,7 @@ export const defaultMetadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://buddysql.seancoughlin.me/",
+    url: "https://henrygetz.github.io/BuddySQLServer/",
     siteName: "SQL Playground",
     title: "SQL Playground - Learn SQL in Your Browser",
     description:

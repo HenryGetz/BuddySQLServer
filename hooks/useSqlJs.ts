@@ -1,7 +1,27 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { QueryResult, SqlResult } from "@/types/database";
+import { CompatibilityFeedback, QueryResult } from "@/types/database";
+import {
+  loadPracticeTranspiler,
+  transpileTsqlToPracticeSql,
+} from "@/lib/practiceTranspiler";
+
+function toPracticeExecutionMessage(rawMessage: string): string {
+  if (/no such table/i.test(rawMessage)) {
+    return "This statement references a table that is not available in the practice database.";
+  }
+
+  if (/no such column/i.test(rawMessage)) {
+    return "This statement references a column that does not exist in the current practice schema.";
+  }
+
+  if (/syntax error/i.test(rawMessage) || /near/i.test(rawMessage)) {
+    return "This statement could not be executed here. Try simplifying SQL Server-specific syntax.";
+  }
+
+  return "This statement could not be executed in the SQL Server practice environment.";
+}
 
 export function useSqlJs() {
   const [SQL, setSQL] = useState<any>(null);
@@ -17,6 +37,8 @@ export function useSqlJs() {
 
     async function initializeSql() {
       try {
+        await loadPracticeTranspiler();
+
         // Check if the sql.js script is already loaded
         if (!(window as any).initSqlJs) {
           // Create script element
@@ -70,8 +92,11 @@ export function useSqlJs() {
     };
   }, []); // Empty dependency array to run only once
 
-  // Function to execute SQL queries
-  const executeQuery = (sql: string): QueryResult => {
+  const executeAgainstDb = (
+    sql: string,
+    compatibility?: CompatibilityFeedback,
+    usePracticeErrors: boolean = false,
+  ): QueryResult => {
     if (!db) {
       return { results: null, error: { message: "Database not initialized" } };
     }
@@ -85,17 +110,69 @@ export function useSqlJs() {
         results,
         error: null,
         executionTime: parseFloat((end - start).toFixed(2)),
+        compatibility,
       };
     } catch (err: any) {
+      const rawMessage =
+        err?.message || "An error occurred while executing the query";
+
+      if (usePracticeErrors) {
+        return {
+          results: null,
+          error: {
+            message: toPracticeExecutionMessage(rawMessage),
+            code: err?.code,
+          },
+          compatibility: {
+            status: "failed",
+            message:
+              "The statement was parsed, but execution failed in this SQL Server practice environment.",
+            hints: [
+              "Try reducing the statement to core query logic.",
+              "Avoid advanced SQL Server procedural or administrative syntax.",
+            ],
+          },
+        };
+      }
+
       return {
         results: null,
         error: {
-          message: err.message || "An error occurred while executing the query",
-          code: err.code,
+          message: rawMessage,
+          code: err?.code,
         },
       };
     }
   };
+
+  // Executes user-authored SQL Server (T-SQL) by transpiling to SQLite first.
+  const executeQuery = (sql: string): QueryResult => {
+    const transpiled = transpileTsqlToPracticeSql(sql);
+
+    if (!transpiled.success || !transpiled.sqliteSql) {
+      return {
+        results: null,
+        error: { message: transpiled.compatibility.message },
+        compatibility: transpiled.compatibility,
+      };
+    }
+
+    if (
+      window.localStorage.getItem("sql-playground-debug-transpiled-sql") ===
+      "true"
+    ) {
+      console.debug("[practice-transpile]", transpiled.sqliteSql);
+    }
+
+    return executeAgainstDb(
+      transpiled.sqliteSql,
+      transpiled.compatibility,
+      true,
+    );
+  };
+
+  // Internal helper for app queries that should stay SQLite-native.
+  const executeRawQuery = (sql: string): QueryResult => executeAgainstDb(sql);
 
   // Function to initialize a database with sample data
   const initializeDatabase = (sqlStatements: string): boolean => {
@@ -116,6 +193,7 @@ export function useSqlJs() {
     isLoading,
     error,
     executeQuery,
+    executeRawQuery,
     initializeDatabase,
   };
 }
