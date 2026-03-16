@@ -1,6 +1,8 @@
 # SQL Playground
 
-An interactive platform to learn SQL fundamentals directly in your browser with hands-on practice. Try it out at [buddysql.seancoughlin.me](https://buddysql.seancoughlin.me)!
+An interactive browser SQL learning app, now with a **SQL Server practice mode** in `/sandbox`.
+
+This is a learning simulator, not a real SQL Server engine. User-entered SQL Server (T-SQL) is transpiled internally and executed in-browser.
 
 ## Features
 
@@ -10,6 +12,9 @@ An interactive platform to learn SQL fundamentals directly in your browser with 
 - **Instant Feedback**: Get helpful error messages and validation for your queries
 - **Progress Tracking**: Your progress is saved automatically to local storage
 - **Zero Backend Required**: Everything runs client-side using SQL.js
+- **SQL Server (T-SQL) Practice Lab**: SQL Server-style practice workflow with compatibility feedback
+- **Dark Mode Toggle**: Theme switch in the top navigation with local persistence
+- **Keyboard-First Command Palette**: `Ctrl/Cmd+K` global command menu with nested pages and quick navigation
 
 ## Technology Stack
 
@@ -30,8 +35,8 @@ An interactive platform to learn SQL fundamentals directly in your browser with 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Scc33/BuddySQL.git
-   cd BuddySQL
+   git clone https://github.com/HenryGetz/BuddySQLServer.git
+   cd BuddySQLServer
    ```
 
 2. Install dependencies:
@@ -53,6 +58,89 @@ An interactive platform to learn SQL fundamentals directly in your browser with 
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+5. Open [http://localhost:3000/sandbox](http://localhost:3000/sandbox) for SQL Server practice mode.
+
+## SQL Server Practice Mode (MVP)
+
+### Internal execution flow
+
+1. Learner writes SQL Server (T-SQL) in the sandbox editor.
+2. App transpiles it with Polyglot (SQL Server (T-SQL) -> SQLite).
+3. App executes transpiled SQL in SQL.js (browser/WASM).
+4. Learner sees only SQL Server practice-oriented UX and feedback.
+
+Normal UI does not show transpiled SQL. For local debugging only, set:
+
+`localStorage.setItem("sql-playground-debug-transpiled-sql", "true")`
+
+### Dark mode
+
+- Toggle is in the header (`moon/sun` button).
+- Persisted to `localStorage` key `sql-playground-theme`.
+- Uses class-based theme switching (`dark` on `<html>`).
+- Sandbox editor, cards, buttons, tables, results, and error/compatibility panels are readable in both themes.
+
+### Keyboard shortcuts
+
+- `Ctrl/Cmd+K`: Open/close the global command palette
+- `g` then `i`: Jump directly to `/sandbox` (when not typing in a form field)
+- In any SQL Server (T-SQL) editor box:
+`Ctrl/Cmd+Enter` or `F5` runs the current SQL Server (T-SQL) statement
+
+The command palette includes:
+
+- nested command pages (`Go to ->`, `Settings ->`)
+- `Backspace` to return to previous palette page when search is empty
+- focus trapping and focus restore on close
+- `aria-live` polite announcements for command result counts while searching
+
+### Compatibility feedback
+
+Sandbox statements return one of:
+
+- `success`: statement executed in practice mode.
+- `caveat`: executed but SQL Server-specific behavior may differ.
+- `failed`: transpilation or execution failed in this practice environment.
+
+Learner-facing messages avoid SQLite implementation jargon.
+
+### Quick practice examples in sandbox
+
+- `TOP + ORDER BY`
+- `SELECT + WHERE`
+- `JOIN + aliases`
+- `GROUP BY`
+- `CREATE TABLE`
+- `INSERT INTO`
+- `Query created table`
+
+## Supported vs unsupported (current)
+
+### Commonly working patterns
+
+- Basic `SELECT`, `WHERE`, `ORDER BY`
+- `JOIN`
+- `GROUP BY` and simple aggregates
+- `TOP` in many query cases
+- Basic `CREATE TABLE` / `INSERT`
+
+### Commonly failing patterns
+
+- Procedural SQL Server (T-SQL) (`DECLARE`, variables, control flow)
+- SQL Server administrative/procedural constructs (`EXEC`, stored proc flows)
+- More advanced SQL Server-specific syntax not mapped by current transpiler/runtime
+
+## Local browser validation done for this MVP
+
+- App and sandbox load successfully.
+- Main sandbox UI renders (schema panel, quick examples, editor, result area).
+- Editor accepts SQL Server (T-SQL) input and runs through existing flow.
+- Working scenarios confirmed in browser: `TOP`, `SELECT+WHERE`, `JOIN`, `GROUP BY`, `CREATE TABLE`, `INSERT`, follow-up `SELECT`.
+- Failure scenarios confirmed in browser with readable messaging: variable/procedural and unsupported proc calls.
+- Theme toggle verified in browser for both light and dark modes.
+- Dark mode persistence verified via `localStorage` and page reload.
+- No fatal runtime console errors were observed during these manual flows.
 
 ## Project Structure
 

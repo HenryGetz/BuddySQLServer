@@ -19,7 +19,7 @@ export const ResultTable: React.FC<ResultTableProps> = ({ results }) => {
               <th
                 key={i}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
               >
                 {column}
               </th>
@@ -35,10 +35,10 @@ export const ResultTable: React.FC<ResultTableProps> = ({ results }) => {
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
                 >
                   {cell === null ? (
-                    <span className="text-gray-400 italic">NULL</span>
+                    <span className="text-gray-500 italic">NULL</span>
                   ) : (
                     String(cell)
                   )}
@@ -50,13 +50,13 @@ export const ResultTable: React.FC<ResultTableProps> = ({ results }) => {
       </table>
 
       {results.values.length === 0 && (
-        <div className="py-4 text-center text-gray-500">
+        <div className="py-4 text-center text-gray-600">
           Query returned 0 rows.
         </div>
       )}
 
       {results.values.length > 0 && (
-        <div className="py-2 px-4 text-right text-xs text-gray-500 border-t">
+        <div className="py-2 px-4 text-right text-xs text-gray-600 border-t">
           {results.values.length} row{results.values.length !== 1 ? "s" : ""}{" "}
           returned
         </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { THEME_STORAGE_KEY } from "@/constants/theme";
 
 // Extracted icon components
 const GitHubIcon = () => (
@@ -56,6 +57,42 @@ const CloseIcon = () => (
   </svg>
 );
 
+const SunIcon = () => (
+  <svg
+    className="h-5 w-5"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 3v2.25M12 18.75V21M4.5 12H2.25M21.75 12H19.5M5.637 5.636l1.591 1.591m9.545 9.546 1.591 1.59m0-12.728-1.591 1.591m-9.545 9.546-1.591 1.59M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+    />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg
+    className="h-5 w-5"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M21.752 15.002A9.75 9.75 0 0111.25 2.25a.75.75 0 00-.868.868A8.25 8.25 0 0020.882 13.62a.75.75 0 00.87-.868z"
+    />
+  </svg>
+);
+
 // Navigation links configuration
 const navLinks = [
   { href: "/", label: "Home" },
@@ -68,6 +105,50 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [themeLoaded, setThemeLoaded] = useState(false);
+
+  const resolveTheme = () => {
+    const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    return storedTheme === "light" || storedTheme === "dark"
+      ? storedTheme
+      : prefersDark
+        ? "dark"
+        : "light";
+  };
+
+  useEffect(() => {
+    const initialTheme = resolveTheme();
+
+    setTheme(initialTheme);
+    setThemeLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    const syncTheme = () => {
+      setTheme(resolveTheme());
+    };
+
+    window.addEventListener("storage", syncTheme);
+    window.addEventListener("sql-theme-updated", syncTheme);
+
+    return () => {
+      window.removeEventListener("storage", syncTheme);
+      window.removeEventListener("sql-theme-updated", syncTheme);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!themeLoaded) return;
+
+    const root = document.documentElement;
+    root.classList.toggle("dark", theme === "dark");
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme, themeLoaded]);
 
   // Close mobile menu when navigating between pages
   useEffect(() => {
@@ -114,8 +195,19 @@ export default function Header() {
     return pathname === path || pathname.startsWith(`${path}/`);
   };
 
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  };
+
+  const themeButtonLabel =
+    theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+
+  const openCommandPalette = () => {
+    window.dispatchEvent(new Event("open-global-command-palette"));
+  };
+
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -127,6 +219,27 @@ export default function Header() {
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-8">
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              className="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 px-3 text-xs font-semibold tracking-wide text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+              aria-label="Open command palette"
+              title="Open command palette (Ctrl/Cmd+K)"
+            >
+              <span className="mr-2">Command</span>
+              <span className="rounded border border-gray-300 bg-gray-50 px-1.5 py-0.5 text-[10px]">
+                Ctrl/Cmd+K
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
+              aria-label={themeButtonLabel}
+              title={themeButtonLabel}
+            >
+              {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+            </button>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -153,6 +266,24 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <div className="flex items-center md:hidden">
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              className="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 px-2 text-xs font-semibold text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 mr-2 cursor-pointer"
+              aria-label="Open command palette"
+              title="Open command palette (Ctrl/Cmd+K)"
+            >
+              ⌘K
+            </button>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 hover:text-gray-900 mr-2 cursor-pointer"
+              aria-label={themeButtonLabel}
+              title={themeButtonLabel}
+            >
+              {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+            </button>
             <a
               href="https://github.com/Scc33/BuddySQL"
               target="_blank"
@@ -185,7 +316,7 @@ export default function Header() {
         className={`${isMenuOpen ? "block" : "hidden"} md:hidden`}
         aria-labelledby="mobile-menu-button"
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg border-t">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg border-t border-gray-200">
           {navLinks.map((link) => (
             <Link
               key={link.href}

@@ -19,22 +19,22 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
   // Sample queries for each table
   const sampleQueries = {
     Customers: [
-      "SELECT * FROM Customers LIMIT 10;",
+      "SELECT TOP 10 * FROM Customers;",
       "SELECT first_name, last_name, email FROM Customers ORDER BY last_name;",
       "SELECT * FROM Customers WHERE phone IS NOT NULL;",
     ],
     Products: [
-      "SELECT * FROM Products LIMIT 10;",
+      "SELECT TOP 10 * FROM Products;",
       "SELECT name, price FROM Products WHERE price > 50 ORDER BY price DESC;",
       "SELECT category, COUNT(*) as count FROM Products GROUP BY category;",
     ],
     Orders: [
-      "SELECT * FROM Orders LIMIT 10;",
+      "SELECT TOP 10 * FROM Orders;",
       "SELECT o.order_id, c.first_name, c.last_name, o.total_amount FROM Orders o JOIN Customers c ON o.customer_id = c.customer_id;",
       "SELECT customer_id, SUM(total_amount) as total_spent FROM Orders GROUP BY customer_id ORDER BY total_spent DESC;",
     ],
     Order_Items: [
-      "SELECT * FROM Order_Items LIMIT 10;",
+      "SELECT TOP 10 * FROM Order_Items;",
       "SELECT oi.order_id, p.name, oi.quantity, oi.price_each FROM Order_Items oi JOIN Products p ON oi.product_id = p.product_id;",
       "SELECT order_id, SUM(quantity * price_each) as total FROM Order_Items GROUP BY order_id;",
     ],
@@ -61,7 +61,7 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-2">
+        <h3 className="text-sm font-medium text-gray-800 mb-2">
           Available Tables
         </h3>
         <div className="flex flex-wrap gap-2">
@@ -82,7 +82,7 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-2">
+        <h3 className="text-sm font-medium text-gray-800 mb-2">
           Table Schema: {activeTable}
         </h3>
         <div className="bg-gray-50 rounded-md border overflow-x-auto">
@@ -91,19 +91,19 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
               <tr>
                 <th
                   scope="col"
-                  className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
                 >
                   Column
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
                 >
                   Type
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
                 >
                   Nullable
                 </th>
@@ -118,10 +118,10 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
                   <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">
                     {col.column}
                   </td>
-                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-500">
+                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">
                     {col.type}
                   </td>
-                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-500">
+                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">
                     {col.nullable}
                   </td>
                 </tr>
@@ -133,18 +133,18 @@ const TableSchemaViewer: React.FC<TableSchemaViewerProps> = ({
 
       <div>
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-sm font-medium text-gray-700">Sample Queries</h3>
+          <h3 className="text-sm font-medium text-gray-800">Sample Queries</h3>
         </div>
         <div className="space-y-2">
           {sampleQueries[activeTable as keyof typeof sampleQueries]?.map(
             (query, index) => (
               <div
                 key={index}
-                className="text-xs font-mono bg-gray-50 p-2 rounded border text-gray-700 overflow-x-auto"
+                className="text-xs font-mono bg-gray-50 p-2 rounded border text-gray-800 overflow-x-auto"
               >
                 {query}
               </div>
-            )
+            ),
           )}
         </div>
       </div>

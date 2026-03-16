@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { QueryResult } from "@/types/database";
 import { ResultTable } from "./ResultTable";
 import { gradeQuery, GradeOptions, GradeResult } from "@/lib/queryGrader";
@@ -32,14 +32,16 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({
   });
   const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (initialQuery && !query) {
-      setQuery(initialQuery);
-    }
-  }, [initialQuery, query]);
+    setQuery(initialQuery || "");
+  }, [initialQuery]);
 
-  const executeQuery = () => {
+  const isRunShortcut = (key: string, ctrlKey: boolean, metaKey: boolean) =>
+    ((ctrlKey || metaKey) && key === "Enter") || key === "F5";
+
+  const executeQuery = useCallback(() => {
     setIsLoading(true);
 
     try {
@@ -58,7 +60,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({
           query,
           result.results,
           !!result.error,
-          options
+          options,
         );
         setGradeResult(grade);
 
@@ -75,25 +77,59 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [
+    disableFeedback,
+    expectedQuery,
+    gradeOptions,
+    onExecuteQuery,
+    onSaveProgress,
+    query,
+  ]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Execute query on Ctrl+Enter or Cmd+Enter
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+    if (isRunShortcut(e.key, e.ctrlKey, e.metaKey)) {
       e.preventDefault();
       executeQuery();
     }
   };
 
+  useEffect(() => {
+    const handleGlobalShortcut = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      if (!isRunShortcut(event.key, event.ctrlKey, event.metaKey)) {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (!editorRef.current?.contains(activeElement)) {
+        return;
+      }
+
+      event.preventDefault();
+      executeQuery();
+    };
+
+    window.addEventListener("keydown", handleGlobalShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleGlobalShortcut);
+    };
+  }, [executeQuery]);
+
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+    <div
+      ref={editorRef}
+      className="bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden"
+    >
       <div className="p-4 bg-gray-50 border-b">
         <textarea
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           className="w-full h-32 p-3 font-mono text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Type your SQL query here..."
+          placeholder="Type your SQL Server (T-SQL) query here..."
         />
         <div className="mt-3 flex justify-between items-center">
           <button
@@ -101,8 +137,11 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({
             disabled={isLoading}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 cursor-pointer"
           >
-            {isLoading ? "Running..." : "Run Query"}
+            {isLoading ? "Running..." : "Run SQL Server (T-SQL) code"}
           </button>
+          <span className="text-sm text-gray-600">
+            Shortcut: Ctrl/Cmd+Enter or F5
+          </span>
         </div>
       </div>
 
@@ -116,23 +155,23 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({
 
         {queryResult.error ? (
           <div className="mt-4 p-4 border border-red-300 bg-red-50 text-red-800 rounded-md">
-            <p className="font-semibold">Error:</p>
+            <p className="font-semibold">Execution message</p>
             <p className="font-mono text-sm">{queryResult.error.message}</p>
           </div>
         ) : queryResult.results && queryResult.results.length > 0 ? (
           <div className="mt-4">
             {queryResult.executionTime && (
-              <div className="mb-2 text-sm text-gray-500">
+              <div className="mb-2 text-sm text-gray-600">
                 Query executed in {queryResult.executionTime}ms
               </div>
             )}
             <ResultTable results={queryResult.results[0]} />
           </div>
         ) : (
-          <div className="mt-4 p-4 text-gray-500 text-center border border-dashed border-gray-300 rounded-md">
+          <div className="mt-4 p-4 text-gray-600 text-center border border-dashed border-gray-300 rounded-md">
             {queryResult.results
               ? "Query executed successfully but returned no results."
-              : "Run a query to see results."}
+              : "Run a SQL Server (T-SQL) statement to see results."}
           </div>
         )}
       </div>
