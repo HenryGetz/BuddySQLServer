@@ -1,0 +1,15 @@
+{
+  "id": "1",
+  "slug": "introduction-to-sql",
+  "title": "Introduction to SQL",
+  "description": "Learn what Structured Query Language is and why it's important",
+  "content": "\n# What is SQL?\n\nSQL (Structured Query Language) is a standard programming language specifically designed for managing and manipulating relational databases. It's pronounced as \"sequel\" or \"S-Q-L\" and has been around since the 1970s.\n\n## Why SQL is Important\n\n- **Universal Language**: SQL is used across virtually all database systems\n- **Data Management**: Makes it possible to store, retrieve, update, and delete data efficiently\n- **Analysis**: Allows you to extract insights by querying complex data\n- **Powerful**: Simple syntax yet powerful capabilities for data operations\n- **Career Skill**: Essential skill for data analysts, engineers, scientists, and many tech roles\n\n## Try Your First SQL Command\n\nThe most basic SQL command is `SELECT`, which retrieves data from a database.\n\nTry running the query in the editor to see all customers in our database:\n\n```sql\nSELECT * FROM Customers;\n```\n\nThe asterisk (`*`) means \"all columns\" - so this query asks for all data from the Customers table.\n    ",
+  "order": 1,
+  "category": "basics",
+  "initialQuery": "SELECT * FROM Customers;",
+  "challenge": {
+    "description": "Write a query to select from the customers table",
+    "success_message": "Great job! You're well on your way to learning SQL!",
+    "validation_query": "SELECT * FROM Customers;"
+  }
+}

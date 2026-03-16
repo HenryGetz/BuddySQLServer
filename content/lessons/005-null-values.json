@@ -1,0 +1,15 @@
+{
+  "id": "5",
+  "slug": "null-values",
+  "title": "Working with NULL Values",
+  "description": "Learn how to handle missing data in SQL databases",
+  "content": "\n# Understanding NULL Values in SQL\n\nIn the world of databases, NULL represents the absence of a value—it's not zero, an empty string, or false; it's the database's way of saying \"this information is unknown or doesn't exist.\"\n\n## What Makes NULL Special?\n\nNULLs behave differently from other values in several important ways:\n\n- NULL is not equal to anything, not even to another NULL\n- Comparing NULL with any value (including NULL) using standard operators always results in UNKNOWN\n- UNKNOWN is neither TRUE nor FALSE—it's a third logical state\n\n## How to Check for NULL Values\n\nSince `column = NULL` doesn't work as expected, SQL provides special operators:\n\n- `IS NULL` - checks if a value is NULL\n- `IS NOT NULL` - checks if a value is not NULL\n\n## Examples of NULL Handling\n\nLet's see how to find products that don't have a description:\n\n```sql\nSELECT name, price, description \nFROM Products \nWHERE description IS NULL;\n```\n\nTo find products that do have a description:\n\n```sql\nSELECT name, price, description \nFROM Products \nWHERE description IS NOT NULL;\n```\n\n## The COALESCE Function\n\nThe COALESCE function provides a powerful way to handle NULL values by returning the first non-NULL value from a list of expressions:\n\n```sql\nSELECT name, \n       price, \n       COALESCE(description, 'No description available') AS description\nFROM Products;\n```\n\nThis query replaces NULL descriptions with the text \"No description available.\"\n\n## Common NULL Pitfalls\n\n- NULLs in arithmetic operations: Any arithmetic with NULL results in NULL\n- NULLs in WHERE conditions: Rows where the condition evaluates to NULL (not TRUE or FALSE) are not included\n- NULLs in GROUP BY: All NULL values are grouped together\n- NULLs in JOIN conditions: Rows with NULL values in join columns won't match\n\nTry running these queries to see how NULL values behave in our database!\n  ",
+  "order": 5,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, COALESCE(description, 'No description available') AS description FROM Products;",
+  "challenge": {
+    "description": "Write a query to find all products that have a description (are NOT NULL) and cost more than $50.",
+    "success_message": "Excellent! You've successfully combined NULL handling with other conditions to filter data properly.",
+    "validation_query": "SELECT * FROM Products WHERE description IS NOT NULL AND price > 50;"
+  }
+}

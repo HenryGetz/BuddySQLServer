@@ -1,0 +1,15 @@
+{
+  "id": "11",
+  "slug": "offset-clause",
+  "title": "The OFFSET Clause",
+  "description": "Learn how to skip rows in your query results",
+  "content": "\n  # Skipping Rows with OFFSET\n  \n  Building on our knowledge of LIMIT, SQL provides another powerful clause - OFFSET. This allows you to skip a specific number of rows before starting to return results.\n  \n  ## The OFFSET Clause\n  \n  The OFFSET clause skips a specified number of rows before starting to return rows.\n  \n  ### Basic Syntax\n  \n  ```sql\n  SELECT column1, column2, ...\n  FROM table_name\n  LIMIT number_of_rows OFFSET skip_rows;\n  ```\n  \n  ### Examples\n  \n  Retrieve the 4th to 6th most expensive products:\n  \n  ```sql\n  SELECT name, price, category \n  FROM Products \n  ORDER BY price DESC \n  LIMIT 3 OFFSET 3;\n  ```\n  \n  Skip the 2 most recent customers and show the next 3:\n  \n  ```sql\n  SELECT customer_id, first_name, last_name, join_date \n  FROM Customers \n  ORDER BY join_date DESC \n  LIMIT 3 OFFSET 2;\n  ```\n  \n  ## Practical Applications\n  \n  - **Pagination**: Implementing \"page 2\", \"page 3\", etc. in an application\n    - For page 1: LIMIT 10 OFFSET 0\n    - For page 2: LIMIT 10 OFFSET 10\n    - For page 3: LIMIT 10 OFFSET 20\n    - The formula is: OFFSET = (page_number - 1) * page_size\n  - **Data Analysis**: Skipping outliers or initial data points\n  - **Batch Processing**: Processing data in batches\n  \n  ## Important Notes\n  \n  - Always combine OFFSET with ORDER BY to ensure predictable results\n  - The first row in the result set has an offset of 0, not 1\n  - Using large OFFSET values on big tables can be inefficient\n  - Different database systems might have different maximums for OFFSET values\n  \n  Try running the example queries to see how OFFSET works with LIMIT!\n    ",
+  "order": 11,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, category FROM Products ORDER BY price DESC LIMIT 3 OFFSET 3;",
+  "challenge": {
+    "description": "Write a query to get the third, fourth, and fifth cheapest products ordered by price (hint: use LIMIT with OFFSET).",
+    "success_message": "Great job! You've successfully used OFFSET to skip rows in your query results.",
+    "validation_query": "SELECT * FROM Products ORDER BY price ASC LIMIT 3 OFFSET 2;"
+  }
+}

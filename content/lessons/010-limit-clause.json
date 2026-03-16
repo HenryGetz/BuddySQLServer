@@ -1,0 +1,15 @@
+{
+  "id": "10",
+  "slug": "limit-clause",
+  "title": "The LIMIT Clause",
+  "description": "Learn how to restrict the number of rows returned by a query",
+  "content": "\n  # Controlling Result Size with LIMIT\n  \n  When working with large datasets, you often don't need to retrieve all rows at once. The LIMIT clause allows you to specify exactly how many rows should be returned.\n  \n  ## The LIMIT Clause\n  \n  The LIMIT clause restricts the number of rows returned by a query.\n  \n  ### Basic Syntax\n  \n  ```sql\n  SELECT column1, column2, ...\n  FROM table_name\n  LIMIT number_of_rows;\n  ```\n  \n  ### Examples\n  \n  Retrieve only the 3 most expensive products:\n  \n  ```sql\n  SELECT name, price, category \n  FROM Products \n  ORDER BY price DESC \n  LIMIT 3;\n  ```\n  \n  Show the 5 newest customers (based on join date):\n  \n  ```sql\n  SELECT customer_id, first_name, last_name, join_date \n  FROM Customers \n  ORDER BY join_date DESC \n  LIMIT 5;\n  ```\n  \n  ## Practical Applications\n  \n  - **Top N Analysis**: Finding the top or bottom N items (highest sales, lowest inventory, etc.)\n  - **Previews**: Showing just a few rows when exploring a new table\n  - **Performance**: Limiting the amount of data returned to improve query performance\n  - **Data Sampling**: Getting a small sample of data for quick analysis\n  \n  ## Important Notes\n  \n  - LIMIT is typically applied after other clauses like WHERE, GROUP BY, and ORDER BY\n  - Without an ORDER BY clause, the specific rows returned can be unpredictable\n  - Different database systems might use different syntax (e.g., FETCH FIRST in some SQL dialects)\n  \n  Try running the example queries to see how LIMIT works!\n    ",
+  "order": 10,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, category FROM Products ORDER BY price DESC LIMIT 3;",
+  "challenge": {
+    "description": "Write a query to find the 5 cheapest products ordered by price.",
+    "success_message": "Excellent! You've successfully used LIMIT to retrieve a specific number of rows.",
+    "validation_query": "SELECT * FROM Products ORDER BY price ASC LIMIT 5;"
+  }
+}

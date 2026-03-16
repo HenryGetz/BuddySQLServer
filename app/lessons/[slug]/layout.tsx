@@ -1,5 +1,9 @@
 import { Metadata } from "next";
-import { getLessonBySlug } from "@/lib/lessons";
+import { getLessonBySlug, lessons } from "@/lib/lessons";
+
+export function generateStaticParams() {
+  return lessons.map((lesson) => ({ slug: lesson.slug }));
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;

@@ -1,0 +1,15 @@
+{
+  "id": "13",
+  "slug": "right-join",
+  "title": "RIGHT JOIN",
+  "description": "Learn how to retrieve all records from the right table and matching records from the left table",
+  "content": "\n# Understanding RIGHT JOIN\n\nA RIGHT JOIN (or RIGHT OUTER JOIN) returns all records from the right table (the second table in the JOIN clause), and the matching records from the left table. If there is no match in the left table, NULL values are returned for left table columns.\n\n## RIGHT JOIN Syntax\n\n```sql\nSELECT column(s)\nFROM table1\nRIGHT JOIN table2 ON table1.column = table2.column;\n```\n\n## RIGHT JOIN Visualization\n\n```\n┌────────────┐     ┌────────────┐\n│  Table1    │     │  Table2    │\n│  (LEFT)    │     │  (RIGHT)   │\n└────────────┘     └────────────┘\n    ┌───────────────┐\n    │ Matched rows  │\n    └───────────────┘\n                    ┌───────────┐\n                    │ Unmatched │\n                    │ rows from │\n                    │ Table2    │\n                    └───────────┘\n```\n\n## When to Use RIGHT JOIN\n\n- When you need all records from the right table, regardless of matches in the left table\n- To find records in the right table that don't have a match in the left table\n- In practice, RIGHT JOIN is less common as the same result can often be achieved by swapping the tables and using a LEFT JOIN\n\n## Example\n\nLet's get all products and the order items they appear in. We want ALL products, even those that haven't been ordered:\n\n```sql\nSELECT p.product_id, p.name, oi.order_id, oi.quantity\nFROM Order_Items oi\nRIGHT JOIN Products p ON oi.product_id = p.product_id\nORDER BY p.product_id;\n```\n\nThis is equivalent to the LEFT JOIN example from the previous lesson, but with the tables switched.\n\n## Finding Records with No Match\n\nYou can use a RIGHT JOIN with a WHERE clause to find records that don't have a match:\n\n```sql\nSELECT p.product_id, p.name\nFROM Order_Items oi\nRIGHT JOIN Products p ON oi.product_id = p.product_id\nWHERE oi.item_id IS NULL;\n```\n\nThis query finds products that haven't been ordered.\n\nTry running these examples to see RIGHT JOIN in action!\n  ",
+  "order": 13,
+  "category": "intermediate",
+  "initialQuery": "SELECT p.product_id, p.name, oi.order_id, oi.quantity FROM Order_Items oi RIGHT JOIN Products p ON oi.product_id = p.product_id ORDER BY p.product_id;",
+  "challenge": {
+    "description": "Write a query using RIGHT JOIN that shows all customers and their order details, including customers without orders. (Note: You could also solve this with LEFT JOIN by switching the table order.)",
+    "success_message": "Well done! You've successfully used RIGHT JOIN to include all customers, even those without orders.",
+    "validation_query": "SELECT o.order_id, o.order_date, c.customer_id, c.first_name, c.last_name FROM Orders o RIGHT JOIN Customers c ON o.customer_id = c.customer_id ORDER BY c.customer_id;"
+  }
+}

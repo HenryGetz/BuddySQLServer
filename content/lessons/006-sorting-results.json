@@ -1,0 +1,15 @@
+{
+  "id": "6",
+  "slug": "sorting-results",
+  "title": "Sorting Results",
+  "description": "Learn how to sort query results using ORDER BY",
+  "content": "\n# Sorting Results with ORDER BY\n\nThe ORDER BY clause allows you to sort the result set by one or more columns.\n\n## Basic Syntax\n\n```sql\nSELECT column1, column2, ...\nFROM table_name\nORDER BY column1 [ASC|DESC], column2 [ASC|DESC], ...;\n```\n\n## Sort Direction\n\n- `ASC` - Ascending order (default if not specified)\n- `DESC` - Descending order\n\n## Example\n\nLet's retrieve all products, sorted by price from highest to lowest:\n\n```sql\nSELECT name, price, category \nFROM Products \nORDER BY price DESC;\n```\n\nTry running this query to see the results!\n    ",
+  "order": 6,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, category FROM Products ORDER BY price DESC;",
+  "challenge": {
+    "description": "Write a query to show all customers ordered alphabetically by last name.",
+    "success_message": "Great job! You've successfully sorted data using ORDER BY.",
+    "validation_query": "SELECT * FROM Customers ORDER BY last_name;"
+  }
+}

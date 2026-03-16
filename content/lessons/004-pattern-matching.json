@@ -1,0 +1,15 @@
+{
+  "id": "4",
+  "slug": "pattern-matching",
+  "title": "Pattern Matching with LIKE",
+  "description": "Learn how to search for text patterns in your data",
+  "content": "\n# Pattern Matching with LIKE\n\nThe LIKE operator allows you to search for patterns within text data, which is perfect for partial matches or when you don't know the exact text you're looking for.\n\n## Basic Syntax\n\n```sql\nSELECT column1, column2, ...\nFROM table_name\nWHERE column LIKE pattern;\n```\n\n## Wildcard Characters\n\nThe LIKE operator uses special wildcard characters:\n\n- **%** (percent sign): Represents zero, one, or multiple characters\n- **_** (underscore): Represents a single character\n\n## Common Pattern Examples\n\n- `'apple%'`: Matches any string that starts with \"apple\"\n- `'%apple'`: Matches any string that ends with \"apple\"\n- `'%apple%'`: Matches any string containing \"apple\" anywhere\n- `'_pple'`: Matches exactly 5 characters where the last 4 are \"pple\"\n- `'a_p_e'`: Matches 5-letter words with 'a' at position 1, 'p' at position 3, and 'e' at position 5\n\n## Try It Out\n\nLet's find all products with names containing the word \"Phone\":\n\n```sql\nSELECT name, price, category \nFROM Products \nWHERE name LIKE '%Phone%';\n```\n\nTry running this query to see the results!\n    ",
+  "order": 4,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, category FROM Products WHERE name LIKE '%Phone%';",
+  "challenge": {
+    "description": "Write a query to find all customers whose last name starts with the letter 'S'.",
+    "success_message": "Excellent! You've successfully used pattern matching to search for specific text patterns.",
+    "validation_query": "SELECT * FROM Customers WHERE last_name LIKE 'S%';"
+  }
+}

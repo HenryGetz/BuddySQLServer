@@ -1,0 +1,15 @@
+{
+  "id": "3",
+  "slug": "filtering-with-where",
+  "title": "Filtering with WHERE",
+  "description": "Learn how to filter data using the WHERE clause",
+  "content": "\n# Filtering Data with WHERE\n\nThe WHERE clause allows you to filter records, only returning rows that match specific conditions.\n\n## Basic Syntax\n\n```sql\nSELECT column1, column2, ...\nFROM table_name\nWHERE condition;\n```\n\n## Comparison Operators\n\n- Equal: `=`\n- Not equal: `<>` or `!=`\n- Greater than: `>`\n- Less than: `<`\n- Greater than or equal: `>=`\n- Less than or equal: `<=`\n\n## Examples\n\nLet's find all products with a price greater than $100:\n\n```sql\nSELECT name, price, category \nFROM Products \nWHERE price > 100;\n```\n\nTry running this query in the editor!\n    ",
+  "order": 3,
+  "category": "basics",
+  "initialQuery": "SELECT name, price, category FROM Products WHERE price > 100;",
+  "challenge": {
+    "description": "Write a query to find all products in the \"Electronics\" category.",
+    "success_message": "Excellent! You've successfully filtered data using the WHERE clause.",
+    "validation_query": "SELECT * FROM Products WHERE category = 'Electronics';"
+  }
+}

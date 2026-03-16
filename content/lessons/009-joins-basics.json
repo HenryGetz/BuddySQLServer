@@ -1,0 +1,15 @@
+{
+  "id": "9",
+  "slug": "joins-basics",
+  "title": "Basic JOINs",
+  "description": "Learn how to combine data from multiple tables",
+  "content": "\n# JOINing Tables in SQL\n\nJoins allow you to combine rows from multiple tables based on a related column between them.\n\n## INNER JOIN Syntax\n\nThe INNER JOIN keyword selects records that have matching values in both tables.\n\n```sql\nSELECT column(s)\nFROM table1\nINNER JOIN table2 ON table1.column = table2.column;\n```\n\n## Example\n\nLet's retrieve customer information along with their orders:\n\n```sql\nSELECT c.first_name, c.last_name, o.order_id, o.order_date, o.total_amount\nFROM Customers c\nINNER JOIN Orders o ON c.customer_id = o.customer_id;\n```\n\nIn this query:\n- `c` and `o` are table aliases (shortcuts) for Customers and Orders\n- The ON clause specifies which columns to match\n\nTry running this query to see the results!\n    ",
+  "order": 9,
+  "category": "intermediate",
+  "initialQuery": "SELECT c.first_name, c.last_name, o.order_id, o.order_date, o.total_amount FROM Customers c INNER JOIN Orders o ON c.customer_id = o.customer_id;",
+  "challenge": {
+    "description": "Write a query that shows product details for each order item (combine Order_Items with Products using a JOIN).",
+    "success_message": "Excellent! You've successfully joined multiple tables to retrieve related data.",
+    "validation_query": "SELECT oi.order_id, oi.quantity, p.name, p.price FROM Order_Items oi INNER JOIN Products p ON oi.product_id = p.product_id;"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "8",
+  "slug": "group-by",
+  "title": "Grouping Data",
+  "description": "Learn how to group data and use aggregate functions on groups",
+  "content": "\n# Grouping Data with GROUP BY\n\nThe GROUP BY clause groups rows that have the same values into summary rows, like \"total sales for each country\" or \"count of customers in each city\".\n\n## Basic Syntax\n\n```sql\nSELECT column1, aggregate_function(column2)\nFROM table_name\nGROUP BY column1;\n```\n\n## Example\n\nCount the number of products in each category:\n\n```sql\nSELECT category, COUNT(*) AS product_count\nFROM Products\nGROUP BY category;\n```\n\nCalculate the average price by category:\n\n```sql\nSELECT category, AVG(price) AS average_price\nFROM Products\nGROUP BY category;\n```\n\nTry running these queries to see how GROUP BY works!\n    ",
+  "order": 8,
+  "category": "intermediate",
+  "initialQuery": "SELECT category, COUNT(*) AS product_count FROM Products GROUP BY category;",
+  "challenge": {
+    "description": "Write a query to find the total value of orders placed by each customer (hint: group by customer_id and sum the total_amount).",
+    "success_message": "Well done! You've successfully used GROUP BY to summarize data.",
+    "validation_query": "SELECT customer_id, SUM(total_amount) AS total_spent FROM Orders GROUP BY customer_id;"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "2",
+  "slug": "select-basics",
+  "title": "SELECT Basics",
+  "description": "Learn how to retrieve specific columns of data",
+  "content": "\n# Selecting Specific Columns\n\nIn the previous lesson, we used `SELECT *` to get all columns from a table. However, often you only need specific columns.\n\n## Syntax for Selecting Columns\n\n```sql\nSELECT column1, column2, ... FROM table_name;\n```\n\n## Benefits of Selecting Specific Columns\n\n- **Efficiency**: Only retrieves the data you need, saving bandwidth and memory\n- **Clarity**: Makes results easier to read and analyze\n- **Performance**: Can significantly improve query speed on large tables\n\n## Try It Out\n\nRun a query to get only the first name, last name, and email of all customers:\n\n```sql\nSELECT first_name, last_name, email FROM Customers;\n```\n\nNotice how the results only contain the columns you specified!\n    ",
+  "order": 2,
+  "category": "basics",
+  "initialQuery": "SELECT first_name, last_name, email FROM Customers;",
+  "challenge": {
+    "description": "Write a query to select only the product name and price from the Products table.",
+    "success_message": "Great job! You've successfully selected specific columns from the Products table.",
+    "validation_query": "SELECT name, price FROM Products;"
+  }
+}

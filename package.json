@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "generate:lessons": "node scripts/generate-lessons.mjs",
+    "dev": "npm run generate:lessons && next dev --turbopack",
+    "build": "npm run generate:lessons && next build",
     "start": "next start",
     "lint": "next lint"
   },

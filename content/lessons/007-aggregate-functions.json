@@ -1,0 +1,15 @@
+{
+  "id": "7",
+  "slug": "aggregate-functions",
+  "title": "Aggregate Functions",
+  "description": "Learn how to use COUNT, SUM, AVG, MIN, and MAX functions",
+  "content": "\n# Aggregate Functions in SQL\n\nAggregate functions perform calculations on groups of rows and return a single value.\n\n## Common Aggregate Functions\n\n- `COUNT()`: Returns the number of rows\n- `SUM()`: Adds values together\n- `AVG()`: Calculates the average of values\n- `MIN()`: Returns the minimum value\n- `MAX()`: Returns the maximum value\n\n## Examples\n\nCount the total number of products:\n\n```sql\nSELECT COUNT(*) AS total_products FROM Products;\n```\n\nFind the average product price:\n\n```sql\nSELECT AVG(price) AS average_price FROM Products;\n```\n\nFind the highest and lowest priced products:\n\n```sql\nSELECT MIN(price) AS lowest_price, MAX(price) AS highest_price FROM Products;\n```\n\nTry running each of these examples to see the results!\n    ",
+  "order": 7,
+  "category": "intermediate",
+  "initialQuery": "SELECT COUNT(*) AS total_products FROM Products;",
+  "challenge": {
+    "description": "Write a query to calculate the total value of all orders (hint: use SUM on the total_amount field in the Orders table).",
+    "success_message": "Excellent! You've successfully used an aggregate function to calculate a total.",
+    "validation_query": "SELECT SUM(total_amount) FROM Orders;"
+  }
+}
